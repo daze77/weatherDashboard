@@ -1,68 +1,71 @@
+var city
 var cityList
 var lastcitySearched
 var cityListLS
+var currentCity = {
 
-pushAndPullLocalStorage()
+}
 
+var searchList
+var searchListLS
 
-
-function pushAndPullLocalStorage(){
-    cityListLS = JSON.parse(localStorage.getItem("cityListLS")) || [];
-
-    cityListLS.push(cityList)
-    localStorage.setItem("cityListLS", JSON.stringify(cityListLS));  
+console.log(city)
 
 
-    //populate list of past searched cities on the dashboard
-cityListLS.forEach(dashboardList); 
+
+
+
+// function pushAndPullLocalStorage(){
+//     cityListLS = JSON.parse(localStorage.getItem("cityListLS")) || [];
+
+//     cityListLS.push(cityList)
+//     localStorage.setItem("cityListLS", JSON.stringify(cityListLS));  
+
+
+//     //populate list of past searched cities on the dashboard
+// cityListLS.forEach(dashboardList); 
+
+function savetoLS(){
+    //pull local storage
+    searchListLS = JSON.parse(localStorage.getItem("searchListLS")) || [];
+    //push local storage
+    searchListLS.push(searchList)
+    localStorage.setItem("searchListLS", JSON.stringify(searchListLS))
+
+
+    searchListLS.forEach(dashboardList);
+
+}
+
+function getWeatherData(){
+
+}
+searchListLS = JSON.parse(localStorage.getItem("searchListLS")) || [];
+
+searchListLS.forEach(dashboardList);
+
+
 
 function dashboardList(item){
     document.querySelector('#citiesSearched').innerHTML += `<button type="button" class="btn btn-light">`+ (item) + `</button><br>`
 }
 
 
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//save list of cities searched to Local Storage
-async function btnClick(event){
-    event.preventDefault();
-    console.log("ButtonClicked")
+function btnClick(event){
+    // event.preventDefault();
+    console.log("ButtonClicked");
 
     var search = document.querySelector('input').value
+    searchList = search
+
+
+    console.log(search)
     
-    console.log( `[btnClick] input(${search})` )
+    console.log(event)
 
-     // search for weather
-     weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/forecast?appid=96cb0c8c08593af5ccd43266287d1a3d&q='+encodeURI(search) ).then( r=>r.json() )
-     console.log( ` .. weather: `, weatherData )
-
-     var id = weatherData.id
-    //  var icon = weatherData.list[0].weather[0].icon
-
-    document.querySelector('#weather').innerHTML = `${id}`
+    savetoLS()
     
-    cityList = document.querySelector('input').value
-
-    console.log(cityList)
-     
-    pushAndPullLocalStorage()
-
 }
 
 
@@ -70,13 +73,38 @@ async function btnClick(event){
 
 
 
-//Weather Widget that I might Use
-
-
-// window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];  window.myWidgetParam.push({id: 15,cityid: '6167865',appid: '96cb0c8c08593af5ccd43266287d1a3d',units: 'metric',containerid: 'openweathermap-widget-15',  });  (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s);  })();
 
 
 
 
 
+// //save list of cities searched to Local Storage
+// async function btnClick(event){
+//     event.preventDefault();
+//     console.log("ButtonClicked")
+
+//     var search = document.querySelector('input').value
+    
+//     console.log(`input ${search}` )
+
+//     city = document.querySelector('input').value
+
+//      // search for weather
+//      weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&q='+encodeURI(search) ).then( r=>r.json() )
+//      console.log( ` .. weather: `, weatherData )
+
+//      var name = weatherData.name
+//     //  var icon = weatherData.list[0].weather[0].icon
+
+//     document.querySelector('#weather').innerHTML = `${name}`
+    
+//     saveList = document.querySelector('input').value
+
+//     console.log(cityList)
+
+  
+     
+//     pushAndPullLocalStorage()
+
+// }
 
