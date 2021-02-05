@@ -4,3 +4,10 @@ button {
 }
 
 
+.weatherCard {
+    font-size: 12px;
+}
+
+ .fivedayTemp, .fivedayHumid {
+    font-size: 12px;
+}
