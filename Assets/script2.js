@@ -1,31 +1,35 @@
+// global variables
 var day = new Date()
 console.log(day)
 
 var newDate = day.toLocaleDateString()
 console.log(newDate)
+var fiveDW
+var tempdaily
+
+var search
 
 
-//search button
+// search button
 function btnClick(){
     // event.preventDefault();
     console.log("ButtonClicked");
-    
-    
+
     weatherAPISearch()
-    
+
 }
 
 async function weatherAPISearch(event){
     // event.preventDefault()
      // search for weather
-     var search = document.querySelector('input').value
+     search = document.querySelector('input').value
      weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
 
-     //lat and lon for location by name performed using API above - needed for one call API below
+     // lat and lon for location by name performed using API above - needed for one call API below
      var weatherLat = weatherData.coord.lat
      var weatherLon = weatherData.coord.lon
 
-    //use of one call api as the UV api is depricated - begining April 2021 aslo pull five day forcast from here
+    // use of one call api as the UV api is depricated - begining April 2021 aslo pull five day forcast from here
     oneCallAPI = await fetch ('https://api.openweathermap.org/data/2.5/onecall?appid=96cb0c8c08593af5ccd43266287d1a3d&exclude=hourly,minutely&units=metric&lat=' + (weatherLat) + '&lon=' +(weatherLon)).then( r =>r.json() )
 
 
@@ -45,49 +49,60 @@ async function weatherAPISearch(event){
     var UVIndex = oneCallAPI.current.uvi
     console.log(UVIndex)
 
-    getWeather(weatherData.name, weatherData.main.temp, weatherData.main.humidity, weatherData.wind.speed, oneCallAPI.current.uvi, iconURL) 
-   
-    //pull information from API to the main dashboard
-    function getWeather(city, temp, humidity, windspeed, UV, icon){
-        document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} (${newDate})</h4><img src="${icon}"/>`;
-        document.querySelector("#weatherTemp").innerHTML = temp + ` &#8451;` ;
-        document.querySelector("#weatherHum").innerHTML = humidity + `%`;
-        document.querySelector('#weatherWind').innerHTML = Math.round((windspeed*3.6)) + " km/h";
-        document.querySelector('#weatherUV').innerHTML = UV;
-    }
+    getWeather(weatherData.name, weatherData.main.temp, weatherData.main.humidity, weatherData.wind.speed, UVIndex, iconURL) 
 
-    //determine the color code of the UV index result
-    if (UVIndex <= 2){
+
+    var fiveDW = oneCallAPI.daily
+    console.log(fiveDW) 
+
+    fiveDayForecast(fiveDW)
+}
+
+
+
+
+// pull information from API to the main dashboard
+function getWeather(city, citytemp, humidity, windspeed, UV, icon){
+    document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} (${newDate})</h4><img src="${icon}"/>`;
+    document.querySelector("#weatherTemp").innerHTML = citytemp + ` &#8451;` ;
+    document.querySelector("#weatherHum").innerHTML = humidity + `%`;
+    document.querySelector('#weatherWind').innerHTML = Math.round((windspeed*3.6)) + " km/h";
+    document.querySelector('#weatherUV').innerHTML = UV;
+
+        // determine the color code of the UV index result
+    if (UV <= 2){
         document.querySelector('#weatherUV').style.backgroundColor = "green";
     }
-    else if (UVIndex >=3 && UVIndex <=5){
+    else if (UV >=3 && UVIndex <=5){
         document.querySelector('#weatherUV').style.backgroundColor = "yellow";
     }
-    else if (UVIndex >=6 && UVIndex <=7){
+    else if (UV >=6 && UVIndex <=7){
         document.querySelector('#weatherUV').style.backgroundColor = "orange";
     }
-    else if (UVIndex >=8 && UVIndex <=10){
+    else if (UV >=8 && UVIndex <=10){
         document.querySelector('#weatherUV').style.backgroundColor = "red";
     }
     else {
         document.querySelector('#weatherUV').style.backgroundColor = "Violet";
     }
-    var fiveDW = oneCallAPI.daily
-    console.log(fiveDW)
-    
-    for(i = 1; i < 6; i++){
-        
-        temp = fiveDW[i].temp.day
-        console.log(temp)
-        humidity = fiveDW[i].humidity
-        icon = fiveDW[i].weather[0]
-    }
-        
+
+}
+
+// function localStorage(){
+//     if (localStorage )
 
 
-    for (i = 0; i < temp.lenght; i++){
-        document.querySelector(`.fivedayTemp`).innerHTML += temp
-    }
+
+// }
+
+
+
+
+
+
+
+
+
 
     // var fiveDayList = {
     //     day1:[`${fiveDW[0].temp.day}`, `${newDate}`+1, `${fiveDW[0].humidity}`, `${fiveDW[0].weather[0].icon}`],
@@ -104,22 +119,25 @@ async function weatherAPISearch(event){
     //Push updatest to five day forecast
     //document.querySelector('#day1date')(p).innerHTMl = day1[0]
 
-}
 
 
-function fiveDayForecast(fiveDW, fiveDayList){
-    console.log(fiveDW)
-    console.log(fiveDayList)
+function fiveDayForecast(fiveDW, tempdaily){
 
-    for (i = 0; i = fiveDayList.lenght; i++){
-        console.log("this is a test for i", fiveDayList[i]);
 
-        var thisisaTest = document.querySelector('#test').innerHTML += `<div> 
-        
-        </div>  `
+
+   
+    for (i = 1; i < 6; i++){ 
+   var iconCodeFD = fiveDW[i].weather[0].icon 
+   var weatherIconFD =  `http://openweathermap.org/img/wn/${iconCodeFD}.png`
+   var fivedayTemp = document.querySelector(".fiveDay"+i)  
+   fivedayTemp.children[0].innerHTML = `Date:  <span>${newDate}[i]</span>`
+   fivedayTemp.children[1].innerHTML = `<span><img src="${weatherIconFD}"/></span>`
+   fivedayTemp.children[2].innerHTML = `Temp:  <span>${fiveDW[i].temp.day}</span>`
+   fivedayTemp.children[3].innerHTML = `Humidity:  <span>${fiveDW[i].humidity}</span>`
+   
+   
     }
+    
 }
 
 
-
-var myModal = new bootstrap.Modal(document.getElementById('myModal'), yes, no)
