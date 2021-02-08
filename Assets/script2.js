@@ -8,22 +8,48 @@ console.log(newDate)
 var fiveDW
 var tempdaily
 var search
-var weatherList = JSON.parse(localStorage.getItem("weatherList"));
+var citySearched
+var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
+ 
+
+
+// cityList function to list all the cities searched
+function cityList(){
+    var citybutton = document.querySelector('#citiesSearched')
+    citybutton.innerHTML = ""
+    console.log(weatherList)
+    var wlLength = weatherList.length
+    console.log(wlLength)
+    for (i = 0; i < wlLength; i++) {
+    var citySearched = weatherList[i].city
+    citybutton.innerHTML += `<button type="button" onclick='cityListbtnPush("${citySearched}")' class="btn btn-light d-block w-100 text-start"> ${citySearched} </button` 
+    }
+    console.log(citySearched)
+    
+}
+
+function cityListbtnPush(city){
+    search = city
+    console.log("City List Button Pushed")
+    console.log(search)
+    weatherAPISearch()
+}
 
 
 // search button
 function btnClick(){
     // event.preventDefault();
     console.log("ButtonClicked");
+    search = document.querySelector('input').value
+
     // starts the weather API search
     weatherAPISearch()
 }
 
-async function weatherAPISearch(event){
+async function weatherAPISearch(){
     // event.preventDefault()
      // search for weather
-     search = document.querySelector('input').value
-     weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
+     var weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
 
      // lat and lon for location by name performed using API above - needed for one call API below
      var weatherLat = weatherData.coord.lat
@@ -57,8 +83,13 @@ async function weatherAPISearch(event){
 
     // run both the fiveDayForecast and saveCity search functions
     fiveDayForecast(fiveDW)
-    saveCity(search)
     
+    
+    if (weatherList.find(weatherList => weatherList.city === search)){
+        console.log ("already on list")
+    } else {
+        saveCity(search) 
+    }
 }
 
 
@@ -89,6 +120,8 @@ function getWeather(city, citytemp, humidity, windspeed, UV, icon){
         document.querySelector('#weatherUV').style.backgroundColor = "Violet";
     }
 }
+
+
 // save city search function
 function saveCity(search){
     // console log the weather list variable which is a pull from locastorage
@@ -125,16 +158,7 @@ function fiveDayForecast(fiveDW){
 }
 
 
-// cityList function to list all the cities searched
-function cityList(weatherList){
-    console.log(weatherList)
-    var wlLength = weatherList.length
-    console.log(wlLength)
-    for (i = 0; i < wlLength; i++) {
-    var citybutton = document.querySelector('#citiesSearched')
-    citybutton.innerHTML += `<button type="button" class="btn btn-light d-block w-100 text-start">${weatherList[i].city}</button` 
-    }
-}
 
 
-cityList(weatherList)
+
+cityList() 
