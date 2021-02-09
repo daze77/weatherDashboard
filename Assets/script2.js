@@ -49,7 +49,7 @@ function btnClick(){
 async function weatherAPISearch(){
     // event.preventDefault()
      // search for weather
-     var weatherData = await fetch( 'http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
+     var weatherData = await fetch( 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
 
      // lat and lon for location by name performed using API above - needed for one call API below
      var weatherLat = weatherData.coord.lat
