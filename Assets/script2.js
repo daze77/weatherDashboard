@@ -49,14 +49,14 @@ function btnClick(){
 async function weatherAPISearch(){
     // event.preventDefault()
      // search for weather
-     var weatherData = await fetch( 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
+     var weatherData = await fetch( 'https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
 
      // lat and lon for location by name performed using API above - needed for one call API below
      var weatherLat = weatherData.coord.lat
      var weatherLon = weatherData.coord.lon
 
-    // use of one call api as the UV api is depricated - begining April 2021 aslo pull five day forcast from here
-    oneCallAPI = await fetch ('https://api.openweathermap.org/data/2.5/onecall?appid=96cb0c8c08593af5ccd43266287d1a3d&exclude=hourly,minutely&units=metric&lat=' + (weatherLat) + '&lon=' +(weatherLon)).then( r =>r.json() )
+    // use of one call api as the UV api is depricated - begining April 2021 also pull five day forcast from here
+    oneCallAPI = await fetch ('https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?appid=96cb0c8c08593af5ccd43266287d1a3d&exclude=hourly,minutely&units=metric&lat=' + (weatherLat) + '&lon=' +(weatherLon)).then( r =>r.json() )
 
     //console log test to ensure data is being pulled
     console.log(weatherData)
