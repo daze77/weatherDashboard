@@ -13,6 +13,9 @@ var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
  
 
 
+
+
+
 // cityList function to list all the cities searched
 function cityList(){
     var citybutton = document.querySelector('#citiesSearched')
@@ -107,13 +110,13 @@ function getWeather(city, citytemp, humidity, windspeed, UV, icon){
     if (UV <= 2){
         document.querySelector('#weatherUV').style.backgroundColor = "green";
     }
-    else if (UV >=3 && UVIndex <=5){
+    else if (UV >=3 && UV <=5){
         document.querySelector('#weatherUV').style.backgroundColor = "yellow";
     }
-    else if (UV >=6 && UVIndex <=7){
+    else if (UV >=6 && UV <=7){
         document.querySelector('#weatherUV').style.backgroundColor = "orange";
     }
-    else if (UV >=8 && UVIndex <=10){
+    else if (UV >=8 && UV <=10){
         document.querySelector('#weatherUV').style.backgroundColor = "red";
     }
     else {
