@@ -19,7 +19,7 @@ https://daze77.github.io/weatherDashboard/
 
 ## __Following are some images of the application as a reference:__
 
-![Weather Dashboard - Mobile View](/Assets/images/wdMobile.png)
-![Weather Dashboard - Search using List Button](/Assets/images/wdSearchfromList.png)
-![Weather Dashboard - Search using Search Bar](/Assets/images/wdSearchfromSearch.png)
-![Weather Dashboard - UV Showcase](/Assets/images/wdUVworking.png)
+![Weather Dashboard - Mobile View](./Assets/images/wdMobile.png)
+![Weather Dashboard - Search using List Button](./Assets/images/wdSearchfromList.png)
+![Weather Dashboard - Search using Search Bar](./Assets/images/wdSearchfromSearch.png)
+![Weather Dashboard - UV Showcase](./Assets/images/wdUVworking.png)
