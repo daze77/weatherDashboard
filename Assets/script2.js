@@ -14,8 +14,6 @@ var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
 
 
 
-
-
 // cityList function to list all the cities searched
 function cityList(){
     var citybutton = document.querySelector('#citiesSearched')
@@ -91,7 +89,7 @@ async function weatherAPISearch(){
     if (weatherList.find(weatherList => weatherList.city === search)){
         console.log ("already on list")
     } else {
-        saveCity(search) 
+        saveCity(weatherData.name) 
     }
 }
 
