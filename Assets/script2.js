@@ -110,13 +110,13 @@ function getWeather(city, citytemp, humidity, windspeed, UV, icon){
     if (UV <= 2){
         document.querySelector('#weatherUV').style.backgroundColor = "green";
     }
-    else if (UV >=3 && UV <=5){
+    else if (UV >=2.000001 && UV <=5){
         document.querySelector('#weatherUV').style.backgroundColor = "yellow";
     }
-    else if (UV >=6 && UV <=7){
+    else if (UV >=5.00001 && UV <=7){
         document.querySelector('#weatherUV').style.backgroundColor = "orange";
     }
-    else if (UV >=8 && UV <=10){
+    else if (UV >=7.00001 && UV <=10){
         document.querySelector('#weatherUV').style.backgroundColor = "red";
     }
     else {
@@ -148,15 +148,34 @@ function saveCity(search){
 
 // populate the five day forecast
 function fiveDayForecast(fiveDW){
+    const fiveDayWeather = document.querySelector('#fiveDayTemp')
+    fiveDayWeather.innerHTML = " "
+    console.log(`this is fiveDW`, fiveDW)
    for (i = 1; i < 6; i++){ 
    var iconCodeFD = fiveDW[i].weather[0].icon 
    var weatherIconFD =  `http://openweathermap.org/img/wn/${iconCodeFD}.png`
-   var fivedayTemp = document.querySelector(".fiveDay"+i) 
+//    var fivedayTemp = document.querySelector(".fiveDay"+i) 
    var fivedayDate = new Date (fiveDW[i].dt*1000) 
-   fivedayTemp.children[0].innerHTML = `<span> ${fivedayDate.toLocaleDateString()}</span>`
-   fivedayTemp.children[1].innerHTML = `<span><img src="${weatherIconFD}"/></span>`
-   fivedayTemp.children[2].innerHTML = `Temp:  <span>${fiveDW[i].temp.day} &#8451;</span>`
-   fivedayTemp.children[3].innerHTML = `Humidity:  <span>${fiveDW[i].humidity}%</span>`
+//    fivedayTemp.children[0].innerHTML = `<span> ${fivedayDate.toLocaleDateString()}</span>`
+//    fivedayTemp.children[1].innerHTML = `<span><img src="${weatherIconFD}"/></span>`
+//    fivedayTemp.children[2].innerHTML = `Temp:  <span>${fiveDW[i].temp.day} &#8451;</span>`
+//    fivedayTemp.children[3].innerHTML = `Humidity:  <span>${fiveDW[i].humidity}%</span>`
+
+    fiveDayWeather.innerHTML += `
+    
+        <div id="BillsTest" class="col">
+            <div class="card h-100 card text-white bg-primary">
+                <div class="card-body fiveDay1" >
+                    <h5 class="card-title fivedayDate"><span> ${fivedayDate.toLocaleDateString()}</span></h5>
+                    <p class="card-text fivedayIcon"><span><img src="${weatherIconFD}"/></span></p>
+                    <p class="card-text fivedayTemp">Temp:  <span>${fiveDW[i].temp.day} &#8451;</span></p>
+                    <p class="card-text fivedayHumid">Humidity:  <span>${fiveDW[i].humidity}%</span></p>     
+                </div>
+            </div>
+        </div>
+    
+    `
+
    }  
 }
 
@@ -165,3 +184,4 @@ function fiveDayForecast(fiveDW){
 
 
 cityList() 
+// setDefaults()
