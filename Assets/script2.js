@@ -11,8 +11,15 @@ var search
 var citySearched
 var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
  
+document.querySelector('#weatherCitySearch').addEventListener("keydown", weatherCitySearch)
 
 
+function weatherCitySearch(event){
+    if(event.keyCode === 13){
+        console.log(`enter button hit`)
+        btnClick(event)
+    }
+}
 
 // cityList function to list all the cities searched
 function cityList(){
@@ -52,44 +59,52 @@ async function weatherAPISearch(){
      // search for weather
      var weatherData = await fetch( 'https://api.openweathermap.org/data/2.5/weather?appid=96cb0c8c08593af5ccd43266287d1a3d&units=metric&q='+encodeURI( search) ).then( r=>r.json() )
 
-     // lat and lon for location by name performed using API above - needed for one call API below
-     var weatherLat = weatherData.coord.lat
-     var weatherLon = weatherData.coord.lon
 
-    // use of one call api as the UV api is depricated - begining April 2021 also pull five day forcast from here
-    oneCallAPI = await fetch ('https://api.openweathermap.org/data/2.5/onecall?appid=96cb0c8c08593af5ccd43266287d1a3d&exclude=hourly,minutely&units=metric&lat=' + (weatherLat) + '&lon=' +(weatherLon)).then( r =>r.json() )
+     if(weatherData.message == "city not found"){
+         console.log(weatherData.message)
+     } else {
+         console.log("city found")
 
-    //console log test to ensure data is being pulled
-    console.log(weatherData)
-    console.log(weatherData.name)
-    console.log(weatherData.main.temp)
-    console.log(weatherData.main.humidity)
-    console.log(weatherData.wind.speed)
-    console.log(weatherData.weather[0].icon)
-    console.log(oneCallAPI)
-    console.log(oneCallAPI.current.uvi)
+              // lat and lon for location by name performed using API above - needed for one call API below
+        var weatherLat = weatherData.coord.lat
+        var weatherLon = weatherData.coord.lon
 
-    var iconCode = weatherData.weather[0].icon
-    console.log(iconCode)
-    var iconURL = `http://openweathermap.org/img/wn/${iconCode}.png`
-    console.log(iconURL)
-    var UVIndex = oneCallAPI.current.uvi
-    console.log(UVIndex)
-    // start the get weather function and pass the following api details through
-    getWeather(weatherData.name, weatherData.main.temp, weatherData.main.humidity, weatherData.wind.speed, UVIndex, iconURL) 
+        // use of one call api as the UV api is depricated - begining April 2021 also pull five day forcast from here
+        oneCallAPI = await fetch ('https://api.openweathermap.org/data/2.5/onecall?appid=96cb0c8c08593af5ccd43266287d1a3d&exclude=hourly,minutely&units=metric&lat=' + (weatherLat) + '&lon=' +(weatherLon)).then( r =>r.json() )
 
-    // save daily forecast to fiveDW variable
-    var fiveDW = oneCallAPI.daily
-    console.log(fiveDW) 
+        //console log test to ensure data is being pulled
+        console.log(weatherData)
+        console.log(weatherData.name)
+        console.log(weatherData.main.temp)
+        console.log(weatherData.main.humidity)
+        console.log(weatherData.wind.speed)
+        console.log(weatherData.weather[0].icon)
+        console.log(oneCallAPI)
+        console.log(oneCallAPI.current.uvi)
 
-    // run both the fiveDayForecast and saveCity search functions
-    fiveDayForecast(fiveDW)
-    
-    
-    if (weatherList.find(weatherList => weatherList.city === search)){
-        console.log ("already on list")
-    } else {
-        saveCity(weatherData.name) 
+        var iconCode = weatherData.weather[0].icon
+        console.log(iconCode)
+        var iconURL = `http://openweathermap.org/img/wn/${iconCode}.png`
+        console.log(iconURL)
+        var UVIndex = oneCallAPI.current.uvi
+        console.log(UVIndex)
+        // start the get weather function and pass the following api details through
+        getWeather(weatherData.name, weatherData.main.temp, weatherData.main.humidity, weatherData.wind.speed, UVIndex, iconURL) 
+
+        // save daily forecast to fiveDW variable
+        var fiveDW = oneCallAPI.daily
+        console.log(fiveDW) 
+
+        // run both the fiveDayForecast and saveCity search functions
+        fiveDayForecast(fiveDW)
+        
+        
+        if (weatherList.find(weatherList => weatherList.city === weatherData.name)){
+            console.log ("already on list")
+        } else {
+            saveCity(weatherData.name) 
+        }
+
     }
 }
 
