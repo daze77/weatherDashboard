@@ -1,4 +1,4 @@
-button {
+#citySearch {
     border: none;
 
 }
@@ -7,14 +7,37 @@ button {
     font-size: 12px;
 }
 
- .fivedayTemp, .fivedayHumid {
+ .fivedayTemp, .fivedayHumid, .fivedayDate{
     font-size: 13px;
+}
+
+
+h4 span{
+    font-size: 12px;
 }
 
 h5{
     font-size: 18px;
 }
 
+h6 span {
+    margin-top: 1px;
+}
+
 .fa-minus:hover {
     color: red
 }
+
+.card-body {
+    font-weight: bold;
+}
+
+.card-body span{
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.card-title {
+    margin-bottom: 0px;
+}
+

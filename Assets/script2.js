@@ -75,9 +75,13 @@ function cityListbtnPush(city){
 // search button
 function btnClick(){
     console.log("ButtonClicked");
-    search = document.querySelector('input').value
-    // starts the weather API search
+    if(document.querySelector('input').value !== ""){
+      search = document.querySelector('input').value
+      // starts the weather API search
     weatherAPISearch()
+    }
+    
+
 }
 
 
@@ -139,7 +143,7 @@ async function weatherAPISearch(){
 
 // pull information from API to the main dashboard
 function getWeather(city, citytemp, humidity, windspeed, UV, icon){
-    document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} (${cardDate})</h4><img src="${icon}"/>`;
+    document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} <span>(${cardDate})</span></h4><img src="${icon}"/>`;
     document.querySelector("#weatherTemp").innerHTML = citytemp + ` &#8451;` ;
     document.querySelector("#weatherHum").innerHTML = humidity + `%`;
     document.querySelector('#weatherWind').innerHTML = Math.round((windspeed*3.6)) + " km/h";
@@ -206,12 +210,11 @@ function fiveDayForecast(fiveDW){
     let date = fivedayDate.getDate()
 
     fiveDayWeather.innerHTML += `
-    
         <div id="BillsTest" class="col">
             <div class="card h-100 card text-white bg-primary">
                 <div class="card-body fiveDay1" >
-                    <h5 class="card-title fivedayDate"><span> ${dayName}</span></h5>
-                    <p class="card-text"><span> ${monthName} ${date}, ${year}</span></p>
+                    <h5 class="card-title "> ${dayName}</h5>
+                    <h6 class="card-text fivedayDate"><span> ${monthName} ${date}, ${year}</span></h6>
                     <p class="card-text fivedayIcon"><span><img src="${weatherIconFD}"/></span></p>
                     <p class="card-text fivedayTemp">Temp:  <span>${fiveDW[i].temp.day} &#8451;</span></p>
                     <p class="card-text fivedayHumid">Humidity:  <span>${fiveDW[i].humidity}%</span></p>    
