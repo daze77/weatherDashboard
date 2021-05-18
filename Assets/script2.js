@@ -14,20 +14,20 @@ let date = d.getDate()
 let cardDate = `${dayName}, ${monthName} ${date}, ${year}`
 let fiveDayCardDate = `${monthName} ${date}`
 
-
-
 var fiveDW
 var tempdaily
-var search
+var search 
 var citySearched
 var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
  
 document.querySelector('#weatherCitySearch').addEventListener("keydown", weatherCitySearch)
 
-
-
-
-
+function setSearchVariable(){
+    if(localStorage.lastCitySearched){
+        search = JSON.parse(localStorage.lastCitySearched)[0].city
+        weatherAPISearch()
+    }
+}
 
 // function to start the search if the enter is pushed instead of the search button
 function weatherCitySearch(event){
@@ -62,14 +62,13 @@ function removeCity(event){
     console.log(weatherList)
     saveToStorage()
     cityList()
-    addMinusButton()
+    minusBtnListner()
 }
 
 function cityListbtnPush(city){
     search = city
-    console.log("City List Button Pushed")
-    console.log(search)
-    weatherAPISearch()
+    console.log("City List Button Pushed, city selected", search)
+    weatherAPISearch()   
 }
 
 // search button
@@ -132,7 +131,8 @@ async function weatherAPISearch(){
         // run both the fiveDayForecast and saveCity search functions
         fiveDayForecast(fiveDW)
         
-        
+        lastCitySearched(weatherData.name)
+
         if (weatherList.find(weatherList => weatherList.city === weatherData.name)){
             console.log ("already on list")
         } else {
@@ -181,17 +181,29 @@ function saveCity(search){
     weatherList.push(currentWeatherSearch)
 
     // save to Local Storage
-    saveToStorage()
+    saveToStorage(currentWeatherSearch)
 
     // run city list function
     cityList(weatherList)
 }
 
+// save last city searched to storage
+function lastCitySearched(currentWeatherSearch){
+    let lastcity = [
+        {
+        city: currentWeatherSearch
+        }
+    ]
+    localStorage.lastCitySearched = JSON.stringify(lastcity)
+
+}
+
 
 // save to Local Storage
 function saveToStorage(){
-        //push updated string to local storage
-        localStorage.setItem("weatherList", JSON.stringify(weatherList));
+    // push updated string to local storage
+    localStorage.setItem("weatherList", JSON.stringify(weatherList));
+
 }
 
 // populate the five day forecast
@@ -226,11 +238,13 @@ function fiveDayForecast(fiveDW){
    }     
 }
 
-function addMinusButton(){
+function minusBtnListner(){
     document.querySelectorAll('.removeCity').forEach(minus => minus.addEventListener('click', removeCity))
 }
 
 cityList() 
-addMinusButton()
+minusBtnListner()
+setSearchVariable()
+
 
 
