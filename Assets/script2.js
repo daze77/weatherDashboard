@@ -1,9 +1,20 @@
 // global variables
-var day = new Date()
-console.log(day)
+const d = new Date()
 
-var newDate = day.toLocaleDateString()
-console.log(newDate)
+const newDate = d.toLocaleDateString()
+
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+let monthName = months[d.getMonth()]
+let dayName = days[d.getDay()]
+let year = d.getFullYear()
+let date = d.getDate()
+
+let cardDate = `${dayName}, ${monthName} ${date}, ${year}`
+let fiveDayCardDate = `${monthName} ${date}`
+
+
 
 var fiveDW
 var tempdaily
@@ -79,8 +90,10 @@ async function weatherAPISearch(){
 
      if(weatherData.message == "city not found"){
          console.log(weatherData.message)
+         
      } else {
          console.log("city found")
+         document.querySelector('input').value = " "
 
         // lat and lon for location by name performed using API above - needed for one call API below
         var weatherLat = weatherData.coord.lat
@@ -126,7 +139,7 @@ async function weatherAPISearch(){
 
 // pull information from API to the main dashboard
 function getWeather(city, citytemp, humidity, windspeed, UV, icon){
-    document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} (${newDate})</h4><img src="${icon}"/>`;
+    document.querySelector('#weatherCity').innerHTML = `<h4 class = "d-inline">${city} (${cardDate})</h4><img src="${icon}"/>`;
     document.querySelector("#weatherTemp").innerHTML = citytemp + ` &#8451;` ;
     document.querySelector("#weatherHum").innerHTML = humidity + `%`;
     document.querySelector('#weatherWind').innerHTML = Math.round((windspeed*3.6)) + " km/h";
@@ -183,17 +196,22 @@ function fiveDayForecast(fiveDW){
     fiveDayWeather.innerHTML = " "
     console.log(`this is fiveDW`, fiveDW)
    for (i = 1; i < 6; i++){ 
-   var iconCodeFD = fiveDW[i].weather[0].icon 
-   var weatherIconFD =  `http://openweathermap.org/img/wn/${iconCodeFD}.png`
+    var iconCodeFD = fiveDW[i].weather[0].icon 
+    var weatherIconFD =  `http://openweathermap.org/img/wn/${iconCodeFD}.png`
     // var fivedayTemp = document.querySelector(".fiveDay"+i) 
-   var fivedayDate = new Date (fiveDW[i].dt*1000) 
+    var fivedayDate = new Date (fiveDW[i].dt*1000) 
+    let monthName = months[fivedayDate.getMonth()]
+    let dayName = days[fivedayDate.getDay()]
+    let year = fivedayDate.getFullYear()
+    let date = fivedayDate.getDate()
 
     fiveDayWeather.innerHTML += `
     
         <div id="BillsTest" class="col">
             <div class="card h-100 card text-white bg-primary">
                 <div class="card-body fiveDay1" >
-                    <h5 class="card-title fivedayDate"><span> ${fivedayDate.toLocaleDateString()}</span></h5>
+                    <h5 class="card-title fivedayDate"><span> ${dayName}</span></h5>
+                    <p class="card-text"><span> ${monthName} ${date}, ${year}</span></p>
                     <p class="card-text fivedayIcon"><span><img src="${weatherIconFD}"/></span></p>
                     <p class="card-text fivedayTemp">Temp:  <span>${fiveDW[i].temp.day} &#8451;</span></p>
                     <p class="card-text fivedayHumid">Humidity:  <span>${fiveDW[i].humidity}%</span></p>    
