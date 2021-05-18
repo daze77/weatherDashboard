@@ -15,3 +15,6 @@ h5{
     font-size: 18px;
 }
 
+.fa-minus:hover {
+    color: red
+}

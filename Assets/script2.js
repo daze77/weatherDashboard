@@ -14,6 +14,11 @@ var weatherList = JSON.parse(localStorage.getItem("weatherList")) || [];
 document.querySelector('#weatherCitySearch').addEventListener("keydown", weatherCitySearch)
 
 
+
+
+
+
+// function to start the search if the enter is pushed instead of the search button
 function weatherCitySearch(event){
     if(event.keyCode === 13){
         console.log(`enter button hit`)
@@ -30,10 +35,23 @@ function cityList(){
     console.log(wlLength)
     for (i = 0; i < wlLength; i++) {
     var citySearched = weatherList[i].city
-    citybutton.innerHTML += `<button type="button" onclick='cityListbtnPush("${citySearched}")' class="btn btn-light d-block w-100 text-start"> ${citySearched} </button` 
+    citybutton.innerHTML += `<button type="button" onClick='cityListbtnPush("${citySearched}")' class="btn btn-light d-block w-100 text-start"> ${citySearched} <i class="removeCity fas fa-minus float-end"></i></button>` 
     }
+
     console.log(citySearched)
-    
+}
+
+function removeCity(event){
+    console.log(weatherList)
+    event.stopPropagation()
+    console.log(`remove city button clicked`, event)
+    console.log(`remove city button clicked`, event.target.parentElement.innerText)
+
+    weatherList = weatherList.filter(e => ('city:', e.city !== `${event.target.parentElement.innerText}`))
+    console.log(weatherList)
+    saveToStorage()
+    cityList()
+    addMinusButton()
 }
 
 function cityListbtnPush(city){
@@ -43,16 +61,15 @@ function cityListbtnPush(city){
     weatherAPISearch()
 }
 
-
 // search button
 function btnClick(){
-    // event.preventDefault();
     console.log("ButtonClicked");
     search = document.querySelector('input').value
-
     // starts the weather API search
     weatherAPISearch()
 }
+
+
 
 async function weatherAPISearch(){
     // event.preventDefault()
@@ -65,7 +82,7 @@ async function weatherAPISearch(){
      } else {
          console.log("city found")
 
-              // lat and lon for location by name performed using API above - needed for one call API below
+        // lat and lon for location by name performed using API above - needed for one call API below
         var weatherLat = weatherData.coord.lat
         var weatherLon = weatherData.coord.lon
 
@@ -104,12 +121,8 @@ async function weatherAPISearch(){
         } else {
             saveCity(weatherData.name) 
         }
-
     }
 }
-
-
-
 
 // pull information from API to the main dashboard
 function getWeather(city, citytemp, humidity, windspeed, UV, icon){
@@ -137,7 +150,6 @@ function getWeather(city, citytemp, humidity, windspeed, UV, icon){
     }
 }
 
-
 // save city search function
 function saveCity(search){
     // console log the weather list variable which is a pull from locastorage
@@ -151,13 +163,19 @@ function saveCity(search){
     // push the current city into the local storage string
     weatherList.push(currentWeatherSearch)
 
-    //push updated string to local storage
-    localStorage.setItem("weatherList", JSON.stringify(weatherList));
+    // save to Local Storage
+    saveToStorage()
 
     // run city list function
     cityList(weatherList)
 }
 
+
+// save to Local Storage
+function saveToStorage(){
+        //push updated string to local storage
+        localStorage.setItem("weatherList", JSON.stringify(weatherList));
+}
 
 // populate the five day forecast
 function fiveDayForecast(fiveDW){
@@ -167,12 +185,8 @@ function fiveDayForecast(fiveDW){
    for (i = 1; i < 6; i++){ 
    var iconCodeFD = fiveDW[i].weather[0].icon 
    var weatherIconFD =  `http://openweathermap.org/img/wn/${iconCodeFD}.png`
-//    var fivedayTemp = document.querySelector(".fiveDay"+i) 
+    // var fivedayTemp = document.querySelector(".fiveDay"+i) 
    var fivedayDate = new Date (fiveDW[i].dt*1000) 
-//    fivedayTemp.children[0].innerHTML = `<span> ${fivedayDate.toLocaleDateString()}</span>`
-//    fivedayTemp.children[1].innerHTML = `<span><img src="${weatherIconFD}"/></span>`
-//    fivedayTemp.children[2].innerHTML = `Temp:  <span>${fiveDW[i].temp.day} &#8451;</span>`
-//    fivedayTemp.children[3].innerHTML = `Humidity:  <span>${fiveDW[i].humidity}%</span>`
 
     fiveDayWeather.innerHTML += `
     
@@ -182,19 +196,20 @@ function fiveDayForecast(fiveDW){
                     <h5 class="card-title fivedayDate"><span> ${fivedayDate.toLocaleDateString()}</span></h5>
                     <p class="card-text fivedayIcon"><span><img src="${weatherIconFD}"/></span></p>
                     <p class="card-text fivedayTemp">Temp:  <span>${fiveDW[i].temp.day} &#8451;</span></p>
-                    <p class="card-text fivedayHumid">Humidity:  <span>${fiveDW[i].humidity}%</span></p>     
+                    <p class="card-text fivedayHumid">Humidity:  <span>${fiveDW[i].humidity}%</span></p>    
                 </div>
+
             </div>
         </div>
-    
     `
-
-   }  
+   }     
 }
 
-
-
-
+function addMinusButton(){
+    document.querySelectorAll('.removeCity').forEach(minus => minus.addEventListener('click', removeCity))
+}
 
 cityList() 
-// setDefaults()
+addMinusButton()
+
+
