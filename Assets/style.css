@@ -7,10 +7,13 @@
     font-size: 12px;
 }
 
- .fivedayTemp, .fivedayHumid, .fivedayDate{
+ .fivedayTemp, .fivedayHumid{
     font-size: 13px;
 }
 
+.fivedayDate{
+    margin-top: 2px;
+}
 
 h4 span{
     font-size: 12px;
@@ -20,9 +23,16 @@ h5{
     font-size: 18px;
 }
 
-h6 span {
-    margin-top: 1px;
+.card-body span{
+    font-size: 12px;
+    font-weight: normal;
 }
+
+.card-body > h6 > span{
+    font-size: 10px;
+}
+
+
 
 .fa-minus:hover {
     color: red
@@ -32,10 +42,7 @@ h6 span {
     font-weight: bold;
 }
 
-.card-body span{
-    font-size: 12px;
-    font-weight: normal;
-}
+
 
 .card-title {
     margin-bottom: 0px;
